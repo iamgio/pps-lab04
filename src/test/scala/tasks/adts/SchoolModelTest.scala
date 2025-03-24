@@ -18,3 +18,22 @@ class SchoolModelTest:
     assertTrue(school.hasCourse("Math"))
   }
 
+  @Test def twoCoursesToTeacher(): Unit = {
+    val school = emptySchool
+      .setTeacherToCourse(teacher("John"), course("Math"))
+      .setTeacherToCourse(teacher("John"), course("Italian"))
+    assertTrue(school.hasTeacher("John"))
+    assertTrue(school.hasCourse("Italian"))
+    assertTrue(school.hasCourse("Math"))
+  }
+
+  @Test def coursesOfATeacher(): Unit = {
+    val school = emptySchool
+      .setTeacherToCourse(teacher("John"), course("Math"))
+      .setTeacherToCourse(teacher("John"), course("Italian"))
+    assertEquals(
+      Sequence.cons("Math", Sequence.cons("Italian", Sequence.nil())),
+      school.coursesOfATeacher("John")
+    )
+  }
+

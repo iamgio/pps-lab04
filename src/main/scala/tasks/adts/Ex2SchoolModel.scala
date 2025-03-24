@@ -139,10 +139,13 @@ object SchoolModel:
     extension (school: School)
       def courses: Sequence[Course] = school.teachersToCourses.map(_.course)
       def teachers: Sequence[Teacher] = school.teachersToCourses.map(_.teacher)
+
       def setTeacherToCourse(teacher: Teacher, course: Course): School =
         val teacherToCourse = TeacherToCourse(teacher, course)
         SchoolImpl(school.teachersToCourses.add(teacherToCourse))
-      def coursesOfATeacher(teacher: Teacher): Sequence[Course] = ???
+
+      def coursesOfATeacher(teacher: Teacher): Sequence[Course] = school.teachersToCourses.filter(_.teacher == teacher).map(_.course)
+
       def hasTeacher(name: String): Boolean = school.teachers.contains(name)
       def hasCourse(name: String): Boolean = school.courses.contains(name)
 
@@ -150,7 +153,7 @@ extension [A](sequence: Sequence[A])
   def add(item: A): Sequence[A] =
     val cons = Sequence.cons(item, Sequence.nil())
     sequence.concat(cons)
-  
+
   @tailrec
   def contains(item: A): Boolean = sequence match
     case Sequence.Cons(h, _) if h == item => true
