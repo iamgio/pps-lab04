@@ -1,5 +1,4 @@
 package tasks.adts
-import u03.extensionmethods.Optionals.*
 import u03.extensionmethods.Sequences.*
 
 /*  Exercise 2: 
@@ -55,7 +54,7 @@ object SchoolModel:
        * Note!! If there are duplicates, just return them once
        * @return the list of courses
        */
-      def courses: Sequence[String]
+      def courses: Sequence[Course]
       /**
        * This method should return the list of teachers
        * e.g.,
@@ -68,7 +67,7 @@ object SchoolModel:
        * Note!! If there are duplicates, just return them once
        * @return the list of teachers
        */
-      def teachers: Sequence[String]
+      def teachers: Sequence[Teacher]
       /**
        * This method should return a new school with the teacher assigned to the course
        * e.g.,
@@ -111,17 +110,20 @@ object SchoolModel:
        */
       def hasCourse(name: String): Boolean
   object BasicSchoolModule extends SchoolModule:
-    override type School = Nothing
-    override type Teacher = Nothing
-    override type Course = Nothing
+    override type School = SchoolImpl
+    override type Teacher = String
+    override type Course = String
 
-    def teacher(name: String): Teacher = ???
-    def course(name: String): Course = ???
-    def emptySchool: School = ???
+    case class TeacherToCourse(teacher: Teacher, course: Course)
+    case class SchoolImpl(teachersToCourses: Sequence[TeacherToCourse])
+
+    def teacher(name: String): Teacher = name
+    def course(name: String): Course = name
+    def emptySchool: School = SchoolImpl(Sequence.nil())
 
     extension (school: School)
-      def courses: Sequence[String] = ???
-      def teachers: Sequence[String] = ???
+      def courses: Sequence[Course] = school.teachersToCourses.map(_.course)
+      def teachers: Sequence[Teacher] = school.teachersToCourses.map(_.teacher)
       def setTeacherToCourse(teacher: Teacher, course: Course): School = ???
       def coursesOfATeacher(teacher: Teacher): Sequence[Course] = ???
       def hasTeacher(name: String): Boolean = ???
