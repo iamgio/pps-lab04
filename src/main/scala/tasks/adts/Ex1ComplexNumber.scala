@@ -37,7 +37,7 @@ object Ex1ComplexNumbers:
         case (re, im) => sum(this.complex(-re, -im))
 
       def asString(): String = complex match
-        case (re, im) if im == 0 => re.toString
-        case (re, im) if re == 0 => s"${im}i"
+        case (re, 0) => re.toString
+        case (0, im) => s"${im}i"
         case (re, im) if im > 0 => s"$re + ${im}i"
         case (re, im) => s"$re - ${-im}i"
